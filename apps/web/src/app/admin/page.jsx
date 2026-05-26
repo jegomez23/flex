@@ -53,14 +53,14 @@ export default function PaginaAdmin() {
   function eliminarProducto(id) { setProductos(prev => prev.filter(p => p.id !== id)) }
 
   return (
-    <div className="p-8">
+    <div className="p-4 sm:p-8">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-zinc-100">Panel de administración</h1>
+        <h1 className="text-xl sm:text-2xl font-bold text-zinc-100">Panel de administración</h1>
         <p className="text-zinc-500 text-sm mt-1">Gestión de usuarios y productos</p>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
         {[
           { label: 'Usuarios totales', valor: usuarios.length },
           { label: 'Usuarios activos', valor: usuarios.filter(u => u.activo).length },
@@ -101,8 +101,8 @@ export default function PaginaAdmin() {
               <Plus size={16} /> Nuevo usuario
             </button>
           </div>
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
-            <table className="w-full text-sm">
+          <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden overflow-x-auto">
+            <table className="w-full text-sm min-w-125">
               <thead>
                 <tr className="border-b border-zinc-800 text-zinc-500 text-xs uppercase">
                   <th className="text-left px-4 py-3">Nombre</th>
@@ -152,8 +152,8 @@ export default function PaginaAdmin() {
               <Plus size={16} /> Nuevo producto
             </button>
           </div>
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
-            <table className="w-full text-sm">
+          <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden overflow-x-auto">
+            <table className="w-full text-sm min-w-125">
               <thead>
                 <tr className="border-b border-zinc-800 text-zinc-500 text-xs uppercase">
                   <th className="text-left px-4 py-3">Nombre</th>

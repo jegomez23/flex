@@ -33,13 +33,13 @@ export default function PaginaPorteros() {
   }
 
   return (
-    <div className="p-8">
+    <div className="p-4 sm:p-8">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-zinc-100">Panel de Porteros</h1>
+        <h1 className="text-xl sm:text-2xl font-bold text-zinc-100">Panel de Porteros</h1>
         <p className="text-zinc-500 text-sm mt-1">Validación de entradas en puerta</p>
       </div>
 
-      <div className="grid grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Scanner */}
         <div className="space-y-6">
           <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8 flex flex-col items-center gap-6">

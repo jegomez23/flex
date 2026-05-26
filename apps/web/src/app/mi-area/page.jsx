@@ -1,16 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { Ticket, MapPin, ShoppingBag } from 'lucide-react'
+import { MapPin, ShoppingBag } from 'lucide-react'
 
-const ENTRADAS = [
-  { id: 1, evento: 'Jazz Nights', fecha: 'Sáb, 25 mayo · 22:00h', tipo: 'Pista Principal', precio: 15, codigo: 'FLEX-2C7B' },
-  { id: 2, evento: 'Soul & Blues', fecha: 'Vie, 31 mayo · 22:00h', tipo: 'Pista Principal', precio: 12, codigo: 'FLEX-8K1M' },
-]
 
 const ZONAS = [
-  { id: 1, nombre: 'Pista Principal', descripcion: 'Acceso zona delantera', evento: 'Jazz Nights', fecha: '25 mayo' },
-  { id: 2, nombre: 'Sala Roja VIP',   descripcion: 'Reserva 23:00–01:00 · 2h', evento: 'Jazz Nights', fecha: '25 mayo' },
+  { id: 1, nombre: 'Sala Roja VIP', descripcion: 'Reserva 23:00–01:00 · 2h', evento: 'Jazz Nights', fecha: '25 mayo' },
 ]
 
 const PEDIDOS = [
@@ -25,18 +20,17 @@ const PEDIDOS = [
 ]
 
 const TABS = [
-  { id: 'entradas', label: 'Entradas',         icon: Ticket },
-  { id: 'zonas',   label: 'Mis zonas',         icon: MapPin },
-  { id: 'pedidos', label: 'Pedidos',           icon: ShoppingBag },
+  { id: 'zonas', label: 'Mis zonas', icon: MapPin },
+  { id: 'pedidos', label: 'Pedidos', icon: ShoppingBag },
 ]
 
 export default function PaginaMiArea() {
-  const [tab, setTab] = useState('entradas')
+  const [tab, setTab] = useState('zonas')
 
   return (
-    <div className="p-8">
+    <div className="p-4 sm:p-8">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-zinc-100">Mi área</h1>
+        <h1 className="text-xl sm:text-2xl font-bold text-zinc-100">Mi área</h1>
         <p className="text-zinc-500 text-sm mt-1">Alex García · Cliente</p>
       </div>
 
@@ -48,9 +42,8 @@ export default function PaginaMiArea() {
             <button
               key={t.id}
               onClick={() => setTab(t.id)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                tab === t.id ? 'bg-gold-500 text-zinc-950' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'
-              }`}
+              className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${tab === t.id ? 'bg-gold-500 text-zinc-950' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'
+                }`}
             >
               <Icon size={15} /> {t.label}
             </button>
@@ -58,35 +51,9 @@ export default function PaginaMiArea() {
         })}
       </div>
 
-      {/* Entradas */}
-      {tab === 'entradas' && (
-        <div className="space-y-4 max-w-2xl">
-          {ENTRADAS.map(e => (
-            <div key={e.id} className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 flex items-center gap-6">
-              <div className="w-20 h-20 bg-white rounded-xl shrink-0 flex items-center justify-center">
-                <div className="grid grid-cols-4 gap-0.5">
-                  {Array(16).fill(0).map((_, i) => (
-                    <div key={i} className={`w-3 h-3 ${Math.random() > 0.5 ? 'bg-zinc-900' : 'bg-white'}`} />
-                  ))}
-                </div>
-              </div>
-              <div className="flex-1">
-                <h3 className="font-bold text-zinc-100">{e.evento}</h3>
-                <p className="text-zinc-400 text-sm mt-0.5">{e.fecha}</p>
-                <p className="text-zinc-500 text-sm">{e.tipo}</p>
-              </div>
-              <div className="text-right shrink-0">
-                <p className="text-gold-400 font-bold text-xl">{e.precio} €</p>
-                <p className="text-zinc-600 text-xs mt-1 font-mono">{e.codigo}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
       {/* Zonas */}
       {tab === 'zonas' && (
-        <div className="grid grid-cols-2 gap-4 max-w-2xl">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl">
           {ZONAS.map(z => (
             <div key={z.id} className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5">
               <div className="flex items-start gap-3 mb-3">
@@ -117,11 +84,10 @@ export default function PaginaMiArea() {
                     <p className="text-zinc-100 font-medium text-sm">{p.mesa}</p>
                     <p className="text-zinc-500 text-xs">{p.fecha}</p>
                   </div>
-                  <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                    p.estado === 'completado'
+                  <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${p.estado === 'completado'
                       ? 'bg-emerald-500/20 text-emerald-400'
                       : 'bg-amber-500/20 text-amber-400'
-                  }`}>
+                    }`}>
                     {p.estado === 'completado' ? 'Entregado' : 'En camino'}
                   </span>
                 </div>

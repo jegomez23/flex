@@ -24,35 +24,45 @@ Desde la raíz del proyecto:
 ```bash
 mkdir apps
 npx create-next-app@latest web --no-typescript --tailwind --app --src-dir --import-alias "@/*"
-```
-
-Opciones al asistente interactivo:
-
-| Pregunta          | Respuesta |
-| ----------------- | --------- |
-| TypeScript        | No        |
-| ESLint            | Sí        |
-| Tailwind CSS      | Sí        |
-| `src/` directory  | Sí        |
-| App Router        | Sí        |
-| Import alias      | `@/*`     |
-
-```bash
 cd apps/web
 npm install lucide-react
-```
-
-Arrancamos:
-
-```bash
 npm run dev
 ```
 
 ---
 
-## 2. Tailwind v4 y estilos globales
+## 2. Tailwind v4 y tipografía
 
 Con Tailwind v4 no hay `tailwind.config.js`. Todo va en CSS.
+
+Las fuentes se cargan desde Google Fonts en el `<head>` del layout:
+
+- **Inter** — cuerpo, etiquetas, navegación
+- **Cormorant Garant** — títulos `h1 / h2 / h3` (serif elegante, coherente con el logo)
+
+```jsx
+// src/app/layout.jsx
+import './globals.css'
+import Shell from '@/components/Shell'
+
+export const metadata = { title: 'Flex — Live Sessions', description: 'Tu noche, tu ritmo' }
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="es">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Inter:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body><Shell>{children}</Shell></body>
+    </html>
+  )
+}
+```
 
 ```css
 /* src/app/globals.css */
@@ -62,6 +72,7 @@ Con Tailwind v4 no hay `tailwind.config.js`. Todo va en CSS.
   --color-gold-400: #D4A843;
   --color-gold-500: #C9A030;
   --color-gold-600: #A07820;
+  --font-display: 'Cormorant Garant', Georgia, serif;
 }
 
 :root {
@@ -69,17 +80,14 @@ Con Tailwind v4 no hay `tailwind.config.js`. Todo va en CSS.
   --foreground: #ededed;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
   @apply antialiased;
 }
+
+h1, h2, h3 { font-family: 'Cormorant Garant', Georgia, serif; }
 
 ::-webkit-scrollbar { @apply w-1; }
 ::-webkit-scrollbar-track { @apply bg-zinc-900; }
@@ -88,48 +96,74 @@ body {
 
 ---
 
-## 3. Layout raíz + Sidebar
+## 3. Shell — layout responsivo
 
-El layout define la estructura compartida: sidebar fija izquierda + área principal scrollable.
+El componente `Shell` decide qué navegación mostrar según el tamaño de pantalla:
+
+- **Móvil** — barra de navegación inferior fija (estilo app nativa)
+- **Desktop** — sidebar lateral estático
+
+Las rutas `/login` y `/register` omiten la navegación por completo.
 
 ```jsx
-// src/app/layout.jsx
-import './globals.css'
-import Sidebar from '@/components/Sidebar'
+// src/components/Shell.jsx  (simplificado)
+'use client'
 
-export const metadata = {
-  title: 'Flex — Live Experience',
-  description: 'Tu noche, tu ritmo',
-}
+const AUTH_ROUTES = ['/login', '/register']
 
-export default function RootLayout({ children }) {
+export default function Shell({ children }) {
+  const pathname = usePathname()
+  if (AUTH_ROUTES.includes(pathname)) return <>{children}</>
+
   return (
-    <html lang="es">
-      <body className="flex h-screen overflow-hidden">
-        <Sidebar />
-        <main className="flex-1 overflow-y-auto">
-          {children}
-        </main>
-      </body>
-    </html>
+    <div className="flex h-screen overflow-hidden">
+      {/* Sidebar solo en desktop */}
+      <div className="hidden lg:block"><Sidebar /></div>
+
+      <div className="flex-1 flex flex-col overflow-hidden min-w-0">
+        {/* Header móvil */}
+        <header className="lg:hidden ...">FLEX</header>
+        {/* Contenido con padding inferior para la barra */}
+        <main className="flex-1 overflow-y-auto pb-20 lg:pb-0">{children}</main>
+      </div>
+
+      {/* Barra inferior solo en móvil */}
+      <BottomNav />
+    </div>
   )
 }
 ```
 
-La Sidebar agrupa los enlaces en dos secciones: **Cliente** y **Gestión**.
+### Barra de navegación móvil
+
+Cinco slots fijos en la parte inferior:
+
+| Slot | Destino |
+| ---- | ------- |
+| Pedir | `/` |
+| VIP | `/vip` |
+| Mi área | `/mi-area` |
+| Perfil | `/perfil` |
+| Gestión *(botón elevado central)* | Despliega panel con Staff · Porteros · Admin |
+
+El botón **Gestión** es un círculo elevado (`-translate-y-3`) que al pulsarse abre un panel flotante encima de la barra con los tres accesos de gestión interna.
+
+---
+
+## 4. Sidebar (desktop)
+
+El sidebar incluye:
+
+- Logo SVG (`FlexLogo`) — `src/components/FlexLogo.jsx`
+- Dos grupos de navegación: **Cliente** y **Gestión**
+- Zona de usuario en la parte inferior: clic navega a `/perfil`
 
 ```jsx
-// src/components/Sidebar.jsx
-'use client'
-
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { ShoppingCart, Crown, User, ShieldCheck, QrCode, LayoutDashboard } from 'lucide-react'
-
+// src/components/Sidebar.jsx  (fragmento)
 const NAV_CLIENTE = [
-  { icon: ShoppingCart,    label: 'Pedir',       href: '/' },
-  { icon: Crown,           label: 'Salas VIP',   href: '/vip' },
-  { icon: User,            label: 'Mi área',     href: '/mi-area' },
+  { icon: ShoppingCart, label: 'Pedir',     href: '/' },
+  { icon: Crown,        label: 'Salas VIP', href: '/vip' },
+  { icon: User,         label: 'Mi área',   href: '/mi-area' },
 ]
 
 const NAV_STAFF = [
@@ -139,110 +173,164 @@ const NAV_STAFF = [
 ]
 ```
 
+### Logo SVG
+
+El logo es un componente SVG puro (`src/components/FlexLogo.jsx`) que renderiza:
+
+- **FLEX** en tipografía serif itálica con degradado dorado
+- Línea separadora fina
+- **LIVE SESSIONS** en letras espaciadas
+
+No depende de imágenes externas ni fuentes de Google.
+
 ---
 
-## 4. Páginas
+## 5. Páginas
 
-### 4.1 Pedir a mesa — `/`
+### 5.1 Auth — `/login` y `/register`
 
-El cliente filtra por categoría (Bebida / Comida), añade productos y envía el pedido.
-
-**Datos estáticos:** 12 productos hardcoded con `nombre`, `categoria`, `precio`, `emoji`.
-
-**Estado local con `useState`:**
-
-- `cat` — categoría activa
-- `carrito` — array de `{ ...producto, cantidad }`
-- `pedidoEnviado` — banner de confirmación temporal
-
-La página usa un layout de dos columnas: grid de productos a la izquierda, carrito lateral a la derecha.
+Layout split: foto de Unsplash a la izquierda, formulario a la derecha. En móvil la foto actúa como fondo tenue.
 
 ```jsx
-// src/app/page.jsx  (fragmento)
-'use client'
-import { useState } from 'react'
+// Foto de ambiente nocturno desde Unsplash (sin coste, sin clave de API)
+<img src="https://images.unsplash.com/photo-XXXXX?w=1200&auto=format&fit=crop&q=80" />
+```
 
-const PRODUCTOS = [
-  { id: 1, nombre: 'Cerveza Artesana', categoria: 'Bebida', precio: 4.5, emoji: '🍺' },
-  // ...
-]
+Ambas páginas están fuera del `Shell` (sin sidebar ni barra inferior).
+
+---
+
+### 5.2 Pedir a mesa — `/`
+
+El cliente filtra por categoría, añade productos y envía el pedido.
+
+**Datos estáticos:** 12 productos con `nombre`, `categoria`, `precio` e `img` (URL de Unsplash).
+
+**Estado local:**
+
+| Variable | Descripción |
+| -------- | ----------- |
+| `cat` | Categoría activa (Todo / Bebida / Comida) |
+| `carrito` | Array de `{ ...producto, cantidad }` |
+| `carritoAbierto` | Visibilidad del drawer lateral |
+| `pedidoEnviado` | Banner de confirmación temporal |
+| `modalMesa` | Visibilidad del modal de número de mesa |
+| `mesa` | Número de mesa introducido por el usuario |
+
+**Flujo del carrito:**
+
+1. Botón flotante dorado (esquina inferior derecha) muestra el número de ítems
+2. Al pulsarlo se abre un **drawer** deslizable desde la derecha (`translate-x-full → translate-x-0`)
+3. Al pulsar **Enviar pedido** aparece un **modal** preguntando el número de mesa
+4. Al confirmar se muestra el banner de éxito y el drawer se cierra automáticamente
+
+```jsx
+// Drawer carrito
+<div className={`fixed inset-y-0 right-0 z-30 w-full sm:w-96 bg-zinc-900 transition-transform duration-300 ${
+  carritoAbierto ? 'translate-x-0' : 'translate-x-full'
+}`}>
 ```
 
 ---
 
-### 4.2 Dashboard Admin — `/admin`
+### 5.3 Dashboard Admin — `/admin`
 
-Gestión de usuarios y productos. Tabs para cambiar entre tablas. Botón "Nuevo" abre un modal con formulario.
-
-**Funcionalidades estáticas:**
-
-- Crear usuario (nombre, email, rol)
-- Crear producto (nombre, categoría, precio)
-- Eliminar fila de la tabla
+Tabs: **Usuarios** / **Productos**. Modales para crear nuevas entradas. Botón eliminar por fila.
 
 ```text
-Roles disponibles: Cliente · Staff · Portero · Admin
-Categorías disponibles: Bebida · Comida
+Roles: Cliente · Staff · Portero · Admin
+Categorías: Bebida · Comida
 ```
 
 ---
 
-### 4.3 Dashboard Staff — `/staff`
+### 5.4 Dashboard Staff — `/staff`
 
-Vista de todos los pedidos del local. Cada pedido muestra mesa, cliente, hora, ítems y estado.
-
-**Flujo:** botón "Completado" → cambia `estado` de `pendiente` a `completado` en el array local.
-
-Filtros: `todos` / `pendiente` / `completado`.
-
----
-
-### 4.4 Dashboard Porteros — `/porteros`
-
-Panel de validación de QR en puerta.
-
-**Interacción estática:** input manual de código → si empieza por `FLEX-` y tiene 9 chars → válido. Muestra resultado verde/rojo 4 segundos. Añade al historial.
+Cada pedido puede avanzar por tres estados:
 
 ```text
-Formato código válido: FLEX-XXXX  (9 caracteres total)
+pendiente → preparando → completado
 ```
 
+La transición se gestiona con dos objetos de configuración:
+
+```js
+const SIGUIENTE = { pendiente: 'preparando', preparando: 'completado' }
+
+const ESTADOS = {
+  pendiente:  { label: 'Pendiente',  color: 'text-amber-400',  icon: Clock },
+  preparando: { label: 'Preparando', color: 'text-blue-400',   icon: ChefHat },
+  completado: { label: 'Completado', color: 'text-emerald-400',icon: CheckCircle },
+}
+```
+
+Filtros: `todos / pendiente / preparando / completado`. Cuatro tarjetas de estadísticas en la cabecera.
+
 ---
 
-### 4.5 Reserva VIP — `/vip`
+### 5.5 Dashboard Porteros — `/porteros`
 
-Tres salas: **Roja** (150 €/h · 10 personas), **Negra** (200 €/h · 15 personas), **Dorada** (300 €/h · 20 personas).
-
-**Flujo:** seleccionar sala → elegir fecha, hora de inicio, duración → ver precio total → confirmar reserva → pantalla de confirmación.
-
-La sala Negra aparece como ocupada (deshabilitada).
+Validación manual de QR. Formato válido: `FLEX-XXXX` (9 caracteres). Resultado visible 4 segundos, después se añade al historial.
 
 ---
 
-### 4.6 Mi área — `/mi-area`
+### 5.6 Reserva VIP — `/vip`
 
-Área personal del cliente con tres pestañas:
+| Sala | Precio | Capacidad | Estado |
+| ---- | ------ | --------- | ------ |
+| Sala Roja | 150 €/h | 10 | Disponible |
+| Sala Negra | 200 €/h | 15 | Ocupada |
+| Sala Dorada | 300 €/h | 20 | Disponible |
+
+Flujo: seleccionar sala → fecha + hora + duración → precio calculado automáticamente → confirmar → pantalla de confirmación.
+
+---
+
+### 5.7 Mi área — `/mi-area`
 
 | Tab | Contenido |
 | --- | --------- |
 | Entradas | QR placeholder + evento, fecha, tipo, código |
-| Mis zonas | Zonas asignadas (pista, sala VIP) con descripción |
-| Pedidos | Historial de pedidos con ítems, estado y total |
+| Mis zonas | Zonas asignadas con descripción y evento |
+| Pedidos | Historial con ítems, estado (Entregado / En camino) y total |
 
 ---
 
-## 5. Estructura final de archivos
+### 5.8 Perfil — `/perfil`
+
+Accesible desde el avatar del sidebar (desktop) o el tab Perfil de la barra inferior (móvil).
+
+Cuatro pestañas:
+
+| Tab | Contenido |
+| --- | --------- |
+| Datos personales | Nombre, email, teléfono, fecha nacimiento, subir avatar |
+| Pago | Tarjetas guardadas + formulario nueva tarjeta (maqueta Stripe) |
+| Seguridad | Cambiar contraseña · Sesiones activas · Eliminar cuenta |
+| Notificaciones | Toggles: pedidos, entradas, VIP, promociones, newsletter |
+
+La sección de pago muestra una **previsualización visual** de la tarjeta que se actualiza en tiempo real mientras el usuario escribe.
+
+---
+
+## 6. Estructura final de archivos
 
 ```text
 apps/web/src/
   app/
-    layout.jsx              ← sidebar + estructura global
-    globals.css             ← Tailwind v4 + tema dorado
-    page.jsx                ← pedir comida/bebida
+    layout.jsx              ← Google Fonts + Shell
+    globals.css             ← Tailwind v4 + tema dorado + tipografía
+    page.jsx                ← pedir comida/bebida (drawer carrito + modal mesa)
+    login/
+      page.jsx              ← login (sin Shell)
+    register/
+      page.jsx              ← registro (sin Shell)
+    perfil/
+      page.jsx              ← configuración de cuenta y pago
     admin/
       page.jsx              ← dashboard admin
     staff/
-      page.jsx              ← dashboard staff
+      page.jsx              ← dashboard staff (3 estados)
     porteros/
       page.jsx              ← scanner QR porteros
     vip/
@@ -250,10 +338,10 @@ apps/web/src/
     mi-area/
       page.jsx              ← área personal cliente
   components/
-    Sidebar.jsx
+    Shell.jsx               ← layout responsivo + barra inferior móvil
+    Sidebar.jsx             ← navegación desktop + link a perfil
+    FlexLogo.jsx            ← logo SVG puro
 ```
-
-Todos los datos son arrays hardcoded en cada archivo. En el siguiente apunte añadiremos **Supabase** para persistir usuarios, productos y pedidos.
 
 ---
 
