@@ -1,16 +1,21 @@
+import { getSessionContext } from "@/lib/supabase/queries";
+import { getNavigationForRole } from "@/data/navigation";
 import { BottomNav } from "@/components/layout/bottom-nav";
 import { TopNav } from "@/components/layout/top-nav";
 import { AmbientBackground } from "@/components/ui/ambient-background";
 
-export function AppShell({ children }) {
+export default async function AppShell({ children }) {
+  const { profile } = await getSessionContext();
+  const navigation = getNavigationForRole(profile?.rol);
+
   return (
     <div className="relative min-h-screen overflow-hidden">
       <AmbientBackground />
-      <TopNav />
+      <TopNav items={navigation.desktop} homeHref={navigation.homeHref} />
       <div className="relative mx-auto w-full max-w-6xl px-4 pb-28 pt-8 sm:px-6 lg:px-8">
         {children}
       </div>
-      <BottomNav />
+      <BottomNav items={navigation.mobile} />
     </div>
   );
 }

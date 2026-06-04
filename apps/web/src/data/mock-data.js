@@ -38,7 +38,7 @@ export const quickActions = [
   },
   {
     title: "Salas VIP",
-    subtitle: "Compara Sala Negra, Roja y Dorada con una vista clara.",
+    subtitle: "Compara Sala Negra, Roja y Gold con una vista clara.",
     href: "/salas-vip",
     icon: Sofa,
   },
@@ -112,7 +112,7 @@ export const vipRooms = [
   },
   {
     slug: "sala-dorada",
-    name: "Sala Dorada",
+    name: "Sala Gold",
     mood: "La experiencia mas exclusiva de FLEX, con una presencia elegante y calida.",
     capacity: "12 a 15 personas",
     price: "Desde 1.500.000 COP",
@@ -126,7 +126,7 @@ export const vipRooms = [
 ];
 
 export const nextReservation = {
-  name: "Sala Dorada",
+  name: "Sala Gold",
   schedule: "Sab 24 mayo / 23:00 / 6 personas",
   note: "Tu mesa estara lista al llegar y el acceso QR ya esta activo.",
 };
@@ -142,7 +142,7 @@ export const reservations = [
   },
   {
     code: "VIP-3",
-    space: "Sala Dorada",
+    space: "Sala Gold",
     date: "Vie 31 mayo",
     time: "12:00 AM",
     guests: 8,
@@ -219,13 +219,13 @@ export const djRequests = [
 ];
 
 export const notifications = [
-  "Tu acceso a Sala Dorada ya esta activo.",
+  "Tu acceso a Sala Gold ya esta activo.",
   "El servicio de botellas llega a tu mesa a las 11:40 PM.",
   "El DJ acepto una de tus sugerencias.",
 ];
 
 export const qrDetails = [
-  "Reserva vinculada a Sala Dorada",
+  "Reserva vinculada a Sala Gold",
   "Ingreso preferente activo",
   "6 personas autorizadas en el mismo acceso",
   "Host visible despues del primer escaneo",
@@ -258,7 +258,7 @@ export const settingsGroups = [
 export const profileStats = [
   { label: "Noches este mes", value: "14" },
   { label: "Reservas VIP", value: "5" },
-  { label: "Sala favorita", value: "Sala Dorada" },
+  { label: "Sala favorita", value: "Sala Gold" },
 ];
 
 export const profileNotes = [

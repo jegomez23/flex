@@ -2,16 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { mobileNav } from "@/data/mock-data";
 import { cn } from "@/lib/utils";
 
-export function BottomNav() {
+export function BottomNav({ items = [] }) {
   const pathname = usePathname();
 
   return (
     <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-white/8 bg-[rgba(8,8,12,0.82)] px-3 py-3 backdrop-blur-2xl md:hidden">
       <div className="mx-auto grid max-w-xl grid-cols-5 gap-2">
-        {mobileNav.map((item) => {
+        {items.map((item) => {
           const active = pathname === item.href;
           return (
             <Link

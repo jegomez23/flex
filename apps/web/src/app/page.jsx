@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { AmbientBackground } from "@/components/ui/ambient-background";
@@ -5,8 +6,16 @@ import { GlassCard } from "@/components/ui/glass-card";
 import { NeonButton } from "@/components/ui/neon-button";
 import { PageReveal } from "@/components/ui/page-reveal";
 import { heroMoments, splashStats, vipRooms } from "@/data/mock-data";
+import { getSessionContext } from "@/lib/supabase/queries";
+import { getRoleRedirectPath } from "@/lib/auth";
 
-export default function SplashPage() {
+export default async function SplashPage() {
+  const { user, profile } = await getSessionContext();
+
+  if (user) {
+    redirect(getRoleRedirectPath(profile?.rol));
+  }
+
   return (
     <main className="relative min-h-screen overflow-hidden bg-[var(--bg)]">
       <AmbientBackground />
