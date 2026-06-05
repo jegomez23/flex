@@ -5,9 +5,38 @@ import { AmbientBackground } from "@/components/ui/ambient-background";
 import { GlassCard } from "@/components/ui/glass-card";
 import { NeonButton } from "@/components/ui/neon-button";
 import { PageReveal } from "@/components/ui/page-reveal";
-import { heroMoments, splashStats, vipRooms } from "@/data/mock-data";
 import { getSessionContext } from "@/lib/supabase/queries";
 import { getRoleRedirectPath } from "@/lib/auth";
+
+const splashStats = [
+  { label: "Reservas VIP", value: "Mesas, salas y acceso en un solo flujo." },
+  { label: "Acceso QR", value: "Entrada rápida para clientes y portero." },
+  { label: "Pedidos", value: "Servicio ágil sin perder el ambiente." },
+];
+
+const heroMoments = [
+  {
+    title: "Reserva sin fricción",
+    tag: "Cliente",
+    description: "El recorrido de noche se abre en pocos pasos y siempre con tu contexto real.",
+  },
+  {
+    title: "Control operativo",
+    tag: "Staff",
+    description: "Pedidos y reservas se concentran en una vista rápida para el turno.",
+  },
+  {
+    title: "Entrada validada",
+    tag: "Portero",
+    description: "QR, reservas y accesos quedan ordenados para una puerta sin ruido.",
+  },
+];
+
+const vipRooms = [
+  { name: "Sala Negra", capacity: "Ambiente íntimo y oscuro." },
+  { name: "Sala Roja", capacity: "Luces intensas y energía alta." },
+  { name: "Sala Gold", capacity: "Zona exclusiva para mesas premium." },
+];
 
 export default async function SplashPage() {
   const { user, profile } = await getSessionContext();
@@ -72,7 +101,7 @@ export default async function SplashPage() {
                   <p className="text-[10px] uppercase tracking-[0.28em] text-white/36">
                     {stat.label}
                   </p>
-                  <p className="mt-3 text-lg font-medium text-white">{stat.value}</p>
+                  <p className="mt-3 text-sm leading-6 text-white/68">{stat.value}</p>
                 </GlassCard>
               ))}
             </div>
@@ -111,12 +140,12 @@ export default async function SplashPage() {
               <div className="grid gap-3 sm:grid-cols-3">
                 {vipRooms.map((room) => (
                   <div
-                    key={room.slug}
+                    key={room.name}
                     className="rounded-3xl border p-4"
                     style={{
-                      borderColor: room.border,
-                      background: room.surface,
-                      boxShadow: room.glow,
+                      borderColor: "rgba(255,255,255,0.08)",
+                      background: "rgba(255,255,255,0.03)",
+                      boxShadow: "0 0 40px rgba(155,92,255,0.08)",
                     }}
                   >
                     <p className="text-sm font-medium text-white">{room.name}</p>

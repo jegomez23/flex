@@ -8,30 +8,7 @@ export const ROLE_REDIRECTS = {
 };
 
 export const ROLE_PATHS = {
-  admin: [
-    "/dashboard/admin",
-    "/admin",
-    "/admin-dashboard",
-    "/panel-admin",
-    "/inicio",
-    "/home",
-    "/reservas",
-    "/salas-vip",
-    "/pedidos",
-    "/acceso-qr",
-    "/qr-access",
-    "/historial",
-    "/reservation-history",
-    "/perfil",
-    "/profile",
-    "/sugerencias-dj",
-    "/dj-requests",
-    "/menu",
-    "/settings",
-    "/ajustes",
-    "/explore",
-    "/explorar",
-  ],
+  admin: ["/dashboard/admin", "/admin", "/admin-dashboard", "/panel-admin"],
   cliente: [
     "/dashboard/cliente",
     "/inicio",
@@ -48,7 +25,7 @@ export const ROLE_PATHS = {
     "/sugerencias-dj",
     "/dj-requests",
   ],
-  staff: ["/dashboard/staff", "/pedidos", "/reservas"],
+  staff: ["/dashboard/staff"],
   portero: ["/dashboard/portero"],
 };
 

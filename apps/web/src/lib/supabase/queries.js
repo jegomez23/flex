@@ -38,3 +38,47 @@ export async function requireProfileRole(allowedRoles) {
 
   return { ...context, allowed: true };
 }
+
+export async function getClientExperienceData(supabase, userId) {
+  const [reservationsResult, ordersResult] = await Promise.all([
+    supabase
+      .from("reservas")
+      .select("id, sala_id, inicio, fin, estado, total, qr_token, creado_en")
+      .eq("cliente_id", userId)
+      .order("inicio", { ascending: false }),
+    supabase
+      .from("pedidos")
+      .select("id, mesa_id, estado, total, creado_en, actualizado")
+      .eq("cliente_id", userId)
+      .order("creado_en", { ascending: false }),
+  ]);
+
+  const reservations = reservationsResult.data ?? [];
+  const orders = ordersResult.data ?? [];
+  const roomIds = [...new Set(reservations.map((reservation) => reservation.sala_id).filter(Boolean))];
+  const tableIds = [...new Set(orders.map((order) => order.mesa_id).filter(Boolean))];
+
+  const [roomsResult, tablesResult] = await Promise.all([
+    roomIds.length
+      ? supabase
+          .from("salas_vip")
+          .select("id, nombre, capacidad, precio_hora, imagen_url, activa")
+          .in("id", roomIds)
+      : Promise.resolve({ data: [] }),
+    tableIds.length
+      ? supabase
+          .from("mesas")
+          .select("id, numero, piso, capacidad, activa")
+          .in("id", tableIds)
+      : Promise.resolve({ data: [] }),
+  ]);
+
+  return {
+    reservations,
+    orders,
+    rooms: roomsResult.data ?? [],
+    tables: tablesResult.data ?? [],
+    reservationError: reservationsResult.error ?? null,
+    orderError: ordersResult.error ?? null,
+  };
+}

@@ -2,13 +2,17 @@ import { GlassCard } from "@/components/ui/glass-card";
 import { NeonButton } from "@/components/ui/neon-button";
 
 export function VipRoomCard({ room }) {
+  const description = room.mood ?? room.description ?? "Sala VIP real de FLEX.";
+  const price = room.price ?? room.priceLabel ?? (room.price_hora ? `${Number(room.price_hora).toLocaleString("es-ES")} / hora` : "—");
+  const highlights = room.highlights ?? [room.active ? "Activa" : "Inactiva"];
+
   return (
     <GlassCard
       className="overflow-hidden p-0"
       style={{
-        background: room.surface,
-        borderColor: room.border,
-        boxShadow: room.glow,
+        background: room.surface ?? "rgba(255,255,255,0.02)",
+        borderColor: room.border ?? "rgba(255,255,255,0.1)",
+        boxShadow: room.glow ?? "inset 0 1px 0 rgba(255,255,255,0.05)",
       }}
     >
       <div className="space-y-5 p-6">
@@ -21,15 +25,15 @@ export function VipRoomCard({ room }) {
           </div>
           <span
             className="rounded-full border px-3 py-1 text-[10px] uppercase tracking-[0.24em]"
-            style={{ color: room.accent, borderColor: room.border }}
+            style={{ color: room.accent ?? "#9b5cff", borderColor: room.border ?? "rgba(255,255,255,0.12)" }}
           >
-            {room.price}
+            {price}
           </span>
         </div>
-        <p className="text-sm leading-6 text-white/64">{room.mood}</p>
+        <p className="text-sm leading-6 text-white/64">{description}</p>
         <div className="grid gap-2 text-sm text-white/70">
           <p>Capacidad: {room.capacity}</p>
-          {room.highlights.map((item) => (
+          {highlights.map((item) => (
             <p key={item}>{item}</p>
           ))}
         </div>

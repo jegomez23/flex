@@ -21,14 +21,14 @@ const CLIENT_NAV = [
   { label: "Mi QR", href: "/acceso-qr", icon: QrCode },
   { label: "Historial", href: "/historial", icon: History },
   { label: "Perfil", href: "/perfil", icon: UserRound },
-  { label: "Sugerir canción", href: "/sugerencias-dj", icon: Music4 },
+  { label: "Sugerir cancion", href: "/sugerencias-dj", icon: Music4 },
 ];
 
 const STAFF_NAV = [
   { label: "Operaciones", href: "/dashboard/staff", icon: Wrench },
-  { label: "Pedidos", href: "/pedidos", icon: CreditCard },
-  { label: "Reservas activas", href: "/reservas", icon: CalendarRange },
-  { label: "Gestión operativa", href: "/inicio", icon: Disc3 },
+  { label: "Pedidos", href: "/dashboard/staff#pedidos", icon: CreditCard },
+  { label: "Reservas activas", href: "/dashboard/staff#reservas", icon: CalendarRange },
+  { label: "Gestion operativa", href: "/dashboard/staff#operativa", icon: Disc3 },
 ];
 
 const PORTERO_NAV = [
@@ -39,14 +39,14 @@ const PORTERO_NAV = [
 ];
 
 const ADMIN_NAV = [
-  { label: "Usuarios", href: "/perfil", icon: UserRound },
-  { label: "Reservas", href: "/reservas", icon: CalendarRange },
-  { label: "Pedidos", href: "/pedidos", icon: Martini },
-  { label: "Productos", href: "/menu", icon: CreditCard },
-  { label: "Mesas", href: "/inicio", icon: Disc3 },
-  { label: "Salas VIP", href: "/salas-vip", icon: Sofa },
-  { label: "Estadísticas", href: "/dashboard/admin", icon: Sparkles },
-  { label: "Configuración", href: "/ajustes", icon: Wrench },
+  { label: "Usuarios", href: "/dashboard/admin#usuarios", icon: UserRound },
+  { label: "Reservas", href: "/dashboard/admin#reservas", icon: CalendarRange },
+  { label: "Pedidos", href: "/dashboard/admin#pedidos", icon: Martini },
+  { label: "Productos", href: "/dashboard/admin#productos", icon: CreditCard },
+  { label: "Mesas", href: "/dashboard/admin#mesas", icon: Disc3 },
+  { label: "Salas VIP", href: "/dashboard/admin#salas-vip", icon: Sofa },
+  { label: "Estadisticas", href: "/dashboard/admin#estadisticas", icon: Sparkles },
+  { label: "Configuracion", href: "/dashboard/admin#configuracion", icon: Wrench },
 ];
 
 const MOBILE_CLIENT_NAV = [
@@ -59,9 +59,9 @@ const MOBILE_CLIENT_NAV = [
 
 const MOBILE_STAFF_NAV = [
   { label: "Ops", href: "/dashboard/staff", icon: Wrench },
-  { label: "Pedidos", href: "/pedidos", icon: CreditCard },
-  { label: "Reservas", href: "/reservas", icon: CalendarRange },
-  { label: "Inicio", href: "/inicio", icon: Sparkles },
+  { label: "Pedidos", href: "/dashboard/staff#pedidos", icon: CreditCard },
+  { label: "Reservas", href: "/dashboard/staff#reservas", icon: CalendarRange },
+  { label: "Inicio", href: "/dashboard/staff", icon: Sparkles },
 ];
 
 const MOBILE_PORTERO_NAV = [
@@ -73,9 +73,9 @@ const MOBILE_PORTERO_NAV = [
 
 const MOBILE_ADMIN_NAV = [
   { label: "Admin", href: "/dashboard/admin", icon: Wrench },
-  { label: "Reservas", href: "/reservas", icon: CalendarRange },
-  { label: "Pedidos", href: "/pedidos", icon: Martini },
-  { label: "Perfil", href: "/perfil", icon: UserRound },
+  { label: "Reservas", href: "/dashboard/admin#reservas", icon: CalendarRange },
+  { label: "Pedidos", href: "/dashboard/admin#pedidos", icon: Martini },
+  { label: "Usuarios", href: "/dashboard/admin#usuarios", icon: UserRound },
 ];
 
 export function getNavigationForRole(role) {

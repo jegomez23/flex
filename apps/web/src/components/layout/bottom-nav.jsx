@@ -11,7 +11,7 @@ export function BottomNav({ items = [] }) {
     <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-white/8 bg-[rgba(8,8,12,0.82)] px-3 py-3 backdrop-blur-2xl md:hidden">
       <div className="mx-auto grid max-w-xl grid-cols-5 gap-2">
         {items.map((item) => {
-          const active = pathname === item.href;
+          const active = pathname === item.href.split("#")[0];
           return (
             <Link
               key={item.href}

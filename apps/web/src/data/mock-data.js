@@ -179,39 +179,6 @@ export const exploreZones = [
   },
 ];
 
-export const menuCategories = [
-  {
-    name: "Bebidas de autor",
-    items: [
-      { name: "Margarita Neural", description: "Tequila, citricos y un acabado frio.", price: "45.000 COP" },
-      { name: "Red Pulse", description: "Frutos rojos, energia y un final mas seco.", price: "20.000 COP" },
-      { name: "Medellin 8", description: "Ron oscuro, cacao y humo ligero.", price: "32.000 COP" },
-    ],
-  },
-  {
-    name: "Cocina",
-    items: [
-      { name: "Mini burgers nocturnas", description: "Carne premium, pan suave y salsa de la casa.", price: "28.000 COP" },
-      { name: "Tostadas de atun", description: "Crocantes, frescas y con toque citrico.", price: "24.000 COP" },
-      { name: "Papas trufadas", description: "Parmesano, hierbas y sal especial.", price: "18.000 COP" },
-    ],
-  },
-  {
-    name: "Hookah",
-    items: [
-      { name: "Purple Orbit", description: "Frutos rojos con menta suave.", price: "55.000 COP" },
-      { name: "Golden Mirage", description: "Vainilla especiada con fondo ambar.", price: "60.000 COP" },
-      { name: "Black Current", description: "Uva oscura con toque helado.", price: "52.000 COP" },
-    ],
-  },
-];
-
-export const serviceNotes = [
-  "Tiempo estimado de entrega: 8 min",
-  "Servicio a mesa disponible en todas las salas VIP",
-  "Confirmacion rapida para uso con una mano",
-];
-
 export const djRequests = [
   { title: "Blinding Lights", artist: "The Weeknd", vibe: "Hora alta" },
   { title: "TQG", artist: "Karol G / Shakira", vibe: "Subida latina" },

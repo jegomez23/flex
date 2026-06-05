@@ -2,8 +2,9 @@ import { GlassCard } from "@/components/ui/glass-card";
 import { StatusPill } from "@/components/ui/status-pill";
 
 function toneForStatus(status) {
-  if (status === "Confirmada") return "success";
-  if (status === "En acceso") return "cyan";
+  if (status === "Confirmada" || status === "pagada" || status === "completada")
+    return "success";
+  if (status === "En acceso" || status === "pendiente") return "cyan";
   return "gold";
 }
 
@@ -19,7 +20,7 @@ export function ReservationList({ items }) {
               </p>
               <p className="text-xl font-medium text-white">{reservation.space}</p>
               <p className="text-sm text-white/58">
-                {reservation.date} / {reservation.time} / {reservation.guests} personas
+                {reservation.date} / {reservation.time} / {reservation.guests ?? reservation.capacity ?? "—"} personas
               </p>
             </div>
             <StatusPill
